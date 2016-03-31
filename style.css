@@ -1,6 +1,12 @@
+body {
+  font-family: 'Special Elite', cursive;
+  font-size: 0;
+}
+
 td {
   background-color: red;
   border: 1px solid black;
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
+  transition: .5s;
 }
