@@ -1,11 +1,31 @@
 document.addEventListener('DOMContentLoaded', function() {
-  var gameBoard;
   var gameBoardDOM = document.querySelector('#gameboard');
-  var aiMove;
+  var modal = document.getElementById('myModal');
+  var modalContent = document.getElementById('modal-content');
+  var modalMessage = document.getElementById('modal-message');
+  var winsDOM = document.getElementById('wins');
+  var lossesDOM = document.getElementById('losses');
+  var drawsDOM = document.getElementById('draws');
+  var playBtn = document.getElementById('play-button');
+  var gameBoard = [];
+  var aiMove = 0;
+  console.log(document.getElementById('difficulty').value);
   var maxDepth = 6;
   var allowAction = true;
   var gameRunning = false;
-  var winningCombinations = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+  var wins = 0;
+  var losses = 0;
+  var draws = 0;
+  var winningCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
 
   function generateGrid(dimension) {
     gameBoard = new Array(9);
@@ -13,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
       gameBoard[i] = '';
     }
   }
+
   function drawGrid(rows, columns) {
     var ids = 0;
     for (var i = 0; i < 3; i++) {
@@ -25,23 +46,25 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
   }
+
   function renderBoard() {
     for (var i = 0; i < 9; i++) {
       document.getElementById(i).innerHTML = gameBoard[i];
       if (gameBoard[i] === 'X') {
-        document.getElementById(i).style = 'background-color: green';
+        document.getElementById(i).style.backgroundColor = 'rgb(61, 61, 61)';
       } else if (gameBoard[i] === 'O') {
-        document.getElementById(i).style = 'background-color: blue';
+        document.getElementById(i).style.backgroundImage = 'url("troll.png")';
+        document.getElementById(i).style.backgroundSize = 'cover';
       }
     }
   }
 
-  function playerWins(state, token) {
+  function playerWins(boardState, token) {
     var win;
     for (var i = 0; i < winningCombinations.length; i++) {
       win = true;
       for (var j = 0; j < winningCombinations[i].length; j++) {
-        if (state[winningCombinations[i][j]] !== token) {
+        if (boardState[winningCombinations[i][j]] !== token) {
           win = false;
         }
       }
@@ -53,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function boardFull(boardState) {
-    // console.log(getMoves(boardState).length);
     return !getMoves(boardState).length;
   }
 
@@ -130,46 +152,68 @@ document.addEventListener('DOMContentLoaded', function() {
   function resetGame() {
     gameBoardDOM.innerHTML = '';
     gameRunning = true;
+    allowAction = true;
     drawGrid();
     generateGrid();
   }
 
   function checkWin() {
     if (boardFull(gameBoard)) {
-      console.log('its a tie');
+      modalMessage.innerHTML = 'if you aint first, youre last.';
+      draws += 1;
+      drawsDOM.innerHTML = 'draws: ' + draws;
+      modal.style.display = "block";
       allowAction = false;
       gameRunning = false;
-          resetGame();
-          return;
+      return true;
     }
     if (playerWins(gameBoard, 'X')) {
-      console.log('you win wow');
-          resetGame();
-          return;
+      modalMessage.innerHTML = 'wow grats you win nothing';
+      wins += 1;
+      winsDOM.innerHTML = 'player wins: ' + wins;
+      modal.style.display = "block";
+      allowAction = false;
+      gameRunning = false;
+      return true;
     }
     if (playerWins(gameBoard, 'O')) {
-      console.log('ai wins');
-          resetGame();
-          return;
+      modalMessage.innerHTML = 'problem?';
+      losses += 1;
+      lossesDOM.innerHTML = 'troll wins: ' + losses;
+      modal.style.display = "block";
+      allowAction = false;
+      gameRunning = false;
+      return true;
     }
     return false;
   }
   gameBoardDOM.addEventListener('click', function(event) {
-
-    if (gameRunning) {
+    if (gameRunning && allowAction) {
       if (gameBoard[event.target.id] === '') {
         gameBoard[event.target.id] = 'X';
         allowAction = false;
         renderBoard();
-        checkWin();
 
         aiAlgo(gameBoard, 'O', 0);
-        gameBoard[aiMove] = 'O';
-        renderBoard();
-        allowAction = true;
-        checkWin();
+        setTimeout(function() {
+          gameBoard[aiMove] = 'O';
+          renderBoard();
+          allowAction = true;
+          checkWin();
+        }, 600);
       }
     }
   });
-
+  playBtn.onclick = function(event) {
+    if (modal.style.display === 'block') {
+      maxDepth = Number(document.getElementById('difficulty').value);
+      if (maxDepth === 0) {
+        maxDepth = 1;
+      }
+      modal.style.display = "none";
+      setTimeout(function() {
+        resetGame();
+      }, 500);
+    }
+  };
 });

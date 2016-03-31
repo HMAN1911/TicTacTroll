@@ -1,13 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>TicTacToe</title>
   <script src="app.js"></script>
   <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href='https://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
 </head>
+
 <body>
-  <div id="gameboard"></div>
+
+  <div id="myModal" class="modal">
+    <div id="modal-content">
+      <h1 id="modal-message"></h1>
+      <h2>Difficulty</h2>
+      <p>easy <---  ---> hard</p>
+      <input id="difficulty" type="range" min="0" max="6" value="6" step="3" />
+      <h2 id="wins">your wins: </h2>
+      <h2 id="losses">troll wins: </h2>
+      <h2 id="draws">draws: </h2>
+      <span id="play-button">play again</span>
+    </div>
+  </div>
+
+  <h1>TIC-TAC-TROLL</h1>
+
+  <div id="app">
+    <div id="gameboard"></div>
+  </div>
+
 </body>
+
 </html>
