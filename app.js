@@ -9,23 +9,13 @@ document.addEventListener('DOMContentLoaded', function() {
   var playBtn = document.getElementById('play-button');
   var gameBoard = [];
   var aiMove = 0;
-  console.log(document.getElementById('difficulty').value);
   var maxDepth = 6;
   var allowAction = true;
   var gameRunning = false;
   var wins = 0;
   var losses = 0;
   var draws = 0;
-  var winningCombinations = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-  ];
+  var winningCombinations = [ [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
 
   function generateGrid(dimension) {
     gameBoard = new Array(9);
