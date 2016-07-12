@@ -6,7 +6,7 @@ This is a tic tac toe implementation written in pure Javascript. It uses the min
 
 ## Installation
 
-Play it [online][c503883d].
+Play it [online][http://hman1911.github.io/TicTacTroll/].
 
   [c503883d]: http://hman1911.github.io/tictactoe/ "play tictactroll"
 
